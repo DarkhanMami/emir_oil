@@ -9,6 +9,18 @@ class EmptySerializer(serializers.Serializer):
     pass
 
 
+class FieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Field
+        fields = ['__all__']
+
+
+class WellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Well
+        fields = ['__all__']
+
+
 class WellMatrixSerializer(serializers.ModelSerializer):
     class Meta:
         model = WellMatrix
