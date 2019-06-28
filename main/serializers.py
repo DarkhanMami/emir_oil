@@ -12,22 +12,28 @@ class EmptySerializer(serializers.Serializer):
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
-        fields = ['__all__']
+        fields = ['name']
 
 
 class WellSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
     class Meta:
         model = Well
-        fields = ['__all__']
+        fields = ['name', 'field']
 
 
 class WellMatrixSerializer(serializers.ModelSerializer):
+    well = WellSerializer(many=False, read_only=True)
+
     class Meta:
         model = WellMatrix
         fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'timestamp']
 
 
 class WellMatrixCreateSerializer(serializers.ModelSerializer):
+    well = WellSerializer(many=False, read_only=True)
+
     class Meta:
         model = WellMatrix
         fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water']
