@@ -7,8 +7,7 @@ from . import views
 app_name = 'api'
 
 router = DefaultRouter()
-router.register(r'feedback', views.FeedbackViewSet, base_name='feedback')
-router.register(r'newsKZ', views.NewsKZViewSet, base_name='newsKZ')
+router.register(r'well_matrix', views.WellMatrixViewSet, base_name='well_matrix')
 
 
 urlpatterns = [

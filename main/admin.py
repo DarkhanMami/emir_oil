@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 from main import models
-from main.models import Feedback, NewsKZ, NewsKZMedia, NewsKZVideo, Field, Well, WellMatrix, FieldBalance
+from main.models import Field, Well, WellMatrix, FieldBalance
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -49,6 +49,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
+
     def has_module_permission(self, request):
         if request.user.is_authenticated and (request.user.type == "Администратор"):
             return True
@@ -57,42 +58,6 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.unregister(Group)
-
-
-@admin.register(Feedback)
-class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ('author', 'contact', 'location', 'career', 'wish_type', 'body', 'timestamp', 'isShown', 'type')
-    list_filter = ('isShown', 'type')
-    search_fields = ('location', )
-
-    def has_module_permission(self, request):
-        if request.user.is_authenticated and (request.user.type == "Менеджер" or request.user.type == "Администратор"):
-            return True
-        else:
-            return False
-
-
-class NewsKZImage(admin.StackedInline):
-    model = NewsKZMedia
-    extra = 1
-
-
-class NewsKZVideo(admin.StackedInline):
-    model = NewsKZVideo
-    extra = 1
-
-
-@admin.register(NewsKZ)
-class NewsKZAdmin(admin.ModelAdmin):
-    list_display = ('link', 'title', 'description', 'timestamp')
-    search_fields = ('title',)
-    inlines = [NewsKZImage, NewsKZVideo]
-
-    def has_module_permission(self, request):
-        if request.user.is_authenticated and (request.user.type == "Журналист" or request.user.type == "Администратор"):
-            return True
-        else:
-            return False
 
 
 @admin.register(Field)
