@@ -24,7 +24,7 @@ class WellSerializer(serializers.ModelSerializer):
 class WellMatrixSerializer(serializers.ModelSerializer):
     class Meta:
         model = WellMatrix
-        fields = ['__all__']
+        fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'timestamp']
 
 
 class WellMatrixCreateSerializer(serializers.ModelSerializer):
