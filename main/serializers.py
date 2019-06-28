@@ -9,27 +9,6 @@ class EmptySerializer(serializers.Serializer):
     pass
 
 
-class RoomMediaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RoomMedia
-        fields = ['file']
-
-
-class RoomShortSerializer(serializers.ModelSerializer):
-    media = serializers.SerializerMethodField('get_room_media')
-
-    def get_room_media(self, room):
-        result = RoomMedia.objects.filter(room=room)
-        medias = list()
-        for res in result:
-            medias.append(RoomMediaSerializer(instance=res).data)
-        return medias
-
-    class Meta:
-        model = Room
-        fields = '__all__'
-
-
 class WellMatrixSerializer(serializers.ModelSerializer):
     class Meta:
         model = WellMatrix

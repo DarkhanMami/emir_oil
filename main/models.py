@@ -92,45 +92,15 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
-class Room(models.Model):
-    name = models.CharField(max_length=255, blank=False, null=False, unique=True, db_index=True, verbose_name=_('Название'))
-    description = models.TextField(max_length=255 * 10, blank=True, default="", verbose_name=_('Описание'))
-    price = models.IntegerField(default=1, db_index=True, verbose_name=_('Цена'))
-    prior_price = models.IntegerField(default=1, db_index=True, verbose_name=_('Высокая цена'))
-    lake_view = models.BooleanField(default=False, verbose_name=_('Вид на озеро'))
-
-    ECONOMY = "Эконом"
-    BUSINESS = "Бизнес"
-    PREMIUM = "Премиум"
-
-    ROOM_CHOICES = (
-        (ECONOMY, _('Эконом')),
-        (BUSINESS, _('Бизнес')),
-        (PREMIUM, _('Премиум')),
-    )
-
-    type = models.CharField(choices=ROOM_CHOICES, default=ECONOMY, max_length=100, db_index=True, verbose_name=_("Тип"))
-    count = models.IntegerField(default=1, db_index=True, verbose_name=_("Количество"))
-
-    class Meta:
-        verbose_name = _("Комната")
-        verbose_name_plural = _("Комнаты")
-
-    def __str__(self):
-        return self.name
-
-
-class RoomMedia(models.Model):
-    file = models.FileField(upload_to=uploaded_filename, blank=True, null=True)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='room')
-
-
 class Field(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True, db_index=True, verbose_name=_('Название'))
 
     class Meta:
         verbose_name = _("Месторождение")
         verbose_name_plural = _("Месторождения")
+
+    def __str__(self):
+        return self.name
 
 
 class Well(models.Model):
@@ -140,6 +110,9 @@ class Well(models.Model):
     class Meta:
         verbose_name = _("Скважина")
         verbose_name_plural = _("Скважины")
+
+    def __str__(self):
+        return self.name
 
 
 class WellMatrix(models.Model):
