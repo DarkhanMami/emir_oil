@@ -112,7 +112,7 @@ class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    @action(methods=['get'], detail=True)
+    @action(methods=['get'], detail=False)
     def get_by_field(self, request, *args, **kwargs):
         serializer = WellMatrixCreateSerializer(data=request.data)
         if serializer.is_valid():
