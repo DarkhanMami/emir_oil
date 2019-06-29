@@ -114,7 +114,7 @@ class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
 
     @action(methods=['get'], detail=False)
     def get_by_field(self, request, *args, **kwargs):
-        field = models.Field.objects.get(field=request.GET.get("field"))
+        field = models.Field.objects.get(name=request.GET.get("field"))
         wells = models.Well.objects.filter(field=field)
         return Response(WellSerializer(wells, many=True).data)
 
