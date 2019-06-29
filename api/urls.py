@@ -8,6 +8,8 @@ app_name = 'api'
 
 router = DefaultRouter()
 router.register(r'well_matrix', views.WellMatrixViewSet, base_name='well_matrix')
+router.register(r'fields', views.WellMatrixViewSet, base_name='fields')
+router.register(r'wells', views.WellMatrixViewSet, base_name='wells')
 
 
 urlpatterns = [

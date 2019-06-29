@@ -18,7 +18,7 @@ from api import serializers
 from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
-from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer
+from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer
 from django.core.mail import EmailMessage
 
 
@@ -86,3 +86,62 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                                                                                   "timestamp": dt})
             return Response(self.get_serializer(wellmatrix, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('name',)
+    queryset = models.Well.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.Well.objects.all()
+
+    def get_serializer_class(self):
+        return WellSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        if self.action == "add_lesson":
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=True)
+    def get_by_field(self, request, *args, **kwargs):
+        serializer = WellMatrixCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            field = models.Field.objects.get(field=request.data["field"])
+            wells = models.Well.objects.filter(field=field)
+            return Response(self.get_serializer(wells, many=True).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('name',)
+    queryset = models.Field.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.Field.objects.all()
+
+    def get_serializer_class(self):
+        return FieldSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        if self.action == "add_lesson":
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
