@@ -116,7 +116,7 @@ class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
     def get_by_field(self, request, *args, **kwargs):
         serializer = WellMatrixCreateSerializer(data=request.data)
         if serializer.is_valid():
-            field = models.Field.objects.get(field=request.data["field"])
+            field = models.Field.objects.get(field=request.GET.get("field"))
             wells = models.Well.objects.filter(field=field)
             return Response(self.get_serializer(wells, many=True).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
