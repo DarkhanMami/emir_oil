@@ -114,12 +114,9 @@ class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
 
     @action(methods=['get'], detail=False)
     def get_by_field(self, request, *args, **kwargs):
-        serializer = WellSerializer(data=request.data)
-        if serializer.is_valid():
-            field = models.Field.objects.get(field=request.GET.get("field"))
-            wells = models.Well.objects.filter(field=field)
-            return Response(self.get_serializer(wells, many=True).data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        field = models.Field.objects.get(field=request.GET.get("field"))
+        wells = models.Well.objects.filter(field=field)
+        return Response(WellSerializer(wells, many=True).data)
 
 
 class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
