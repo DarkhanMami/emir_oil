@@ -18,7 +18,8 @@ from api import serializers
 from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
-from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer
+from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
+    FieldBalanceSerializer
 from django.core.mail import EmailMessage
 
 
@@ -69,12 +70,49 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         Instantiates and returns the list of permissions that this view requires.
         """
         permission_classes = [IsAuthenticated]
-        if self.action == "add_lesson":
-            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     @action(methods=['post'], detail=False)
     def create_wellmatrix(self, request, *args, **kwargs):
+        serializer = WellMatrixCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            well = models.Well.objects.get(name=request.data["well"])
+            dt = datetime.now()
+            wellmatrix = WellMatrix.objects.update_or_create(well=well, defaults={"fluid": request.data["fluid"],
+                                                                                  "teh_rej_fluid": request.data["teh_rej_fluid"],
+                                                                                  "teh_rej_oil": request.data["teh_rej_oil"],
+                                                                                  "teh_rej_water": request.data["teh_rej_water"],
+                                                                                  "timestamp": dt})
+            return Response(self.get_serializer(wellmatrix, many=False).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('field',)
+    queryset = models.FieldBalance.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.FieldBalance.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'create_balance':
+            return WellMatrixCreateSerializer
+        return FieldBalanceSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @action(methods=['post'], detail=False)
+    def create_balance(self, request, *args, **kwargs):
         serializer = WellMatrixCreateSerializer(data=request.data)
         if serializer.is_valid():
             well = models.Well.objects.get(name=request.data["well"])

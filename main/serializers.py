@@ -40,9 +40,11 @@ class WellMatrixCreateSerializer(serializers.ModelSerializer):
 
 
 class FieldBalanceSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
     class Meta:
         model = FieldBalance
-        fields = ['__all__']
+        fields = fields = ['field', 'transport_balance', 'ansagan_balance', 'timestamp']
 
 
 class FieldBalanceCreateSerializer(serializers.ModelSerializer):
