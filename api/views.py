@@ -19,7 +19,7 @@ from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
-    FieldBalanceSerializer
+    FieldBalanceSerializer, FieldBalanceCreateSerializer
 from django.core.mail import EmailMessage
 
 

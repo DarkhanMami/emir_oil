@@ -48,6 +48,8 @@ class FieldBalanceSerializer(serializers.ModelSerializer):
 
 
 class FieldBalanceCreateSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
     class Meta:
         model = FieldBalance
-        fields = ['__all__']
+        fields = ['field', 'transport_balance', 'ansagan_balance']

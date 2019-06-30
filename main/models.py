@@ -137,3 +137,4 @@ class FieldBalance(models.Model):
     class Meta:
         verbose_name = _("Баланс по месторождению")
         verbose_name_plural = _("Баланс по месторождениям")
+
