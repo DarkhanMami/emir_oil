@@ -100,8 +100,8 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
         return models.FieldBalance.objects.all()
 
     def get_serializer_class(self):
-        # if self.action == 'create_balance':
-        #     return WellMatrixCreateSerializer
+        if self.action == 'create_balance':
+            return WellMatrixCreateSerializer
         return FieldBalanceSerializer
 
     def get_permissions(self):
@@ -110,6 +110,20 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
         """
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(methods=['post'], detail=False)
+    def create_balance(self, request, *args, **kwargs):
+        serializer = WellMatrixCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            well = models.Well.objects.get(name=request.data["well"])
+            dt = datetime.now()
+            wellmatrix = WellMatrix.objects.update_or_create(well=well, defaults={"fluid": request.data["fluid"],
+                                                                                  "teh_rej_fluid": request.data["teh_rej_fluid"],
+                                                                                  "teh_rej_oil": request.data["teh_rej_oil"],
+                                                                                  "teh_rej_water": request.data["teh_rej_water"],
+                                                                                  "timestamp": dt})
+            return Response(self.get_serializer(wellmatrix, many=False).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
