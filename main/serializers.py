@@ -47,7 +47,7 @@ class FieldBalanceSerializer(serializers.ModelSerializer):
         fields = fields = ['field', 'transport_balance', 'ansagan_balance', 'timestamp']
 
 
-class FieldBalanceCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FieldBalance
-        fields = ['__all__']
+# class FieldBalanceCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = FieldBalance
+#         fields = ['__all__']
