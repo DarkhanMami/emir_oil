@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime
-from django.db.models.aggregates import Count
+from django.db.models.aggregates import Sum, Count
 from django.conf import settings
 import urllib
 import json
@@ -120,8 +120,7 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
 
     @action(methods=['get'], detail=False)
     def get_total(self, request, *args, **kwargs):
-        result = models.FieldBalance.objects.all().extra({"day": "date_trunc('day', timestamp)"}).values("day").order_by().annotate(count=Count("id"))
-        print(result)
+        result = models.FieldBalance.objects.values('timestamp').annotate(transport_balance=Sum('transport_balance'))
         return Response(FieldBalanceSerializer(result, many=True).data)
 
 
