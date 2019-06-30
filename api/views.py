@@ -92,7 +92,6 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('field',)
-    # queryset = models.FieldBalance.objects.all()
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -102,7 +101,7 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
 
     def get_serializer_class(self):
         if self.action == 'create_balance':
-            return WellMatrixCreateSerializer
+            return FieldBalanceCreateSerializer
         return FieldBalanceSerializer
 
     def get_permissions(self):
@@ -115,14 +114,32 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
     @action(methods=['get'], detail=False)
     def get_by_field(self, request, *args, **kwargs):
         field = models.Field.objects.get(name=request.GET.get("field"))
-        result = models.FieldBalance.objects.filter(field=field)
+        result = models.FieldBalance.objects.filter(field=field, timestamp__year__gte=2019,
+                                                    timestamp__month__gte=request.GET.get("month"),
+                                                    timestamp__year__lte=2019,
+                                                    timestamp__month__lte=request.GET.get("month"))
         return Response(FieldBalanceSerializer(result, many=True).data)
 
     @action(methods=['get'], detail=False)
     def get_total(self, request, *args, **kwargs):
-        result = models.FieldBalance.objects.values('timestamp')\
+        result = models.FieldBalance.objects.filter(timestamp__year__gte=2019,
+                                                    timestamp__month__gte=request.GET.get("month"),
+                                                    timestamp__year__lte=2019,
+                                                    timestamp__month__lte=request.GET.get("month")).values('timestamp')\
             .annotate(transport_balance=Sum('transport_balance'), ansagan_balance=Sum('ansagan_balance'))
         return Response(FieldBalanceSerializer(result, many=True).data)
+
+    @action(methods=['post'], detail=False)
+    def create_balance(self, request, *args, **kwargs):
+        serializer = FieldBalanceCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            field = models.Field.objects.get(name=request.data["field"])
+            dt = datetime.now()
+            balance = models.FieldBalance.objects.update_or_create(field=field, timestamp=dt,
+                                                                   defaults={"transport_balance": request.data["transport_balance"],
+                                                                             "ansagan_balance": request.data["ansagan_balance"]})
+            return Response(self.get_serializer(balance, many=False).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
