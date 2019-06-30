@@ -120,10 +120,9 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
 
     @action(methods=['get'], detail=False)
     def get_total(self, request, *args, **kwargs):
-        result = models.FieldBalance.objects.values('timestamp').annotate(transport_balance=Sum('transport_balance'))
+        result = models.FieldBalance.objects.values('timestamp')\
+            .annotate(transport_balance=Sum('transport_balance'), ansagan_balance=Sum('ansagan_balance'))
         return Response(FieldBalanceSerializer(result, many=True).data)
-
-
 
 
 class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
