@@ -44,7 +44,8 @@ class FieldBalanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldBalance
-        fields = ['field', 'transport_balance', 'ansagan_balance', 'timestamp']
+        fields = ['field', 'transport_balance', 'ansagan_balance', 'transport_brutto', 'ansagan_brutto',
+                  'transport_netto', 'ansagan_netto', 'transport_density', 'ansagan_density', 'timestamp']
 
 
 class FieldBalanceCreateSerializer(serializers.ModelSerializer):
@@ -52,4 +53,5 @@ class FieldBalanceCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldBalance
-        fields = ['field', 'transport_balance', 'ansagan_balance']
+        fields = ['field', 'transport_balance', 'ansagan_balance', 'transport_brutto', 'ansagan_brutto',
+                  'transport_netto', 'ansagan_netto', 'transport_density', 'ansagan_density',]

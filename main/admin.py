@@ -80,5 +80,6 @@ class WellMatrixAdmin(admin.ModelAdmin):
 
 @admin.register(FieldBalance)
 class WellMatrixAdmin(admin.ModelAdmin):
-    list_display = ('field', 'transport_balance', 'ansagan_balance', 'timestamp')
+    list_display = ('field', 'transport_balance', 'ansagan_balance', 'transport_brutto', 'ansagan_brutto',
+                    'transport_netto', 'ansagan_netto', 'transport_density', 'ansagan_density', 'timestamp')
     list_filter = ('field',)

@@ -126,7 +126,10 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
                                                     timestamp__month__gte=request.GET.get("month"),
                                                     timestamp__year__lte=2019,
                                                     timestamp__month__lte=request.GET.get("month")).values('timestamp')\
-            .annotate(transport_balance=Sum('transport_balance'), ansagan_balance=Sum('ansagan_balance'))
+            .annotate(transport_balance=Sum('transport_balance'), ansagan_balance=Sum('ansagan_balance'),
+                      transport_brutto=Sum('transport_brutto'), ansagan_brutto=Sum('ansagan_brutto'),
+                      transport_netto=Sum('transport_netto'), ansagan_netto=Sum('ansagan_netto'),
+                      transport_density=Sum('transport_density'), ansagan_density=Sum('ansagan_density'))
         return Response(FieldBalanceSerializer(result, many=True).data)
 
     @action(methods=['post'], detail=False)
@@ -137,7 +140,9 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
             dt = datetime.now()
             balance = models.FieldBalance.objects.update_or_create(field=field, timestamp=dt,
                                                                    defaults={"transport_balance": request.data["transport_balance"],
-                                                                             "ansagan_balance": request.data["ansagan_balance"]})
+                                                                             "transport_brutto": request.data["transport_brutto"],
+                                                                             "transport_netto": request.data["transport_netto"],
+                                                                             "transport_density": request.data["transport_density"]})
             return Response(self.get_serializer(balance, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -130,8 +130,15 @@ class WellMatrix(models.Model):
 
 class FieldBalance(models.Model):
     field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='bal_fields')
-    transport_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы'))
-    ansagan_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган'))
+    transport_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (жидкость)'))
+    ansagan_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (жидкость)'))
+    transport_brutto = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (брутто)'))
+    ansagan_brutto = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (брутто)'))
+    transport_netto = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (нетто)'))
+    ansagan_netto = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (нетто)'))
+    transport_density = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (плотность)'))
+    ansagan_density = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (плотность)'))
+
     timestamp = models.DateField(blank=False, verbose_name=_('Дата замера'))
 
     class Meta:
