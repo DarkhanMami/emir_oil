@@ -129,7 +129,9 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
             .annotate(transport_balance=Sum('transport_balance'), ansagan_balance=Sum('ansagan_balance'),
                       transport_brutto=Sum('transport_brutto'), ansagan_brutto=Sum('ansagan_brutto'),
                       transport_netto=Sum('transport_netto'), ansagan_netto=Sum('ansagan_netto'),
-                      transport_density=Sum('transport_density'), ansagan_density=Sum('ansagan_density'))
+                      transport_density=Sum('transport_density'), ansagan_density=Sum('ansagan_density'),
+                      agzu_fluid=Sum('agzu_fluid'), agzu_oil=Sum('agzu_oil'),
+                      teh_rej_fluid=Sum('teh_rej_fluid'), teh_rej_oil=Sum('teh_rej_oil'))
         return Response(FieldBalanceSerializer(result, many=True).data)
 
     @action(methods=['post'], detail=False)
@@ -139,10 +141,14 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
             field = models.Field.objects.get(name=request.data["field"])
             dt = datetime.now()
             balance = models.FieldBalance.objects.update_or_create(field=field, timestamp=dt,
-                                                                   defaults={"transport_balance": request.data["transport_balance"],
-                                                                             "transport_brutto": request.data["transport_brutto"],
-                                                                             "transport_netto": request.data["transport_netto"],
-                                                                             "transport_density": request.data["transport_density"]})
+                                                   defaults={"transport_balance": request.data["transport_balance"],
+                                                             "transport_brutto": request.data["transport_brutto"],
+                                                             "transport_netto": request.data["transport_netto"],
+                                                             "transport_density": request.data["transport_density"],
+                                                             "agzu_fluid": request.data["agzu_fluid"],
+                                                             "agzu_oil": request.data["agzu_oil"],
+                                                             "teh_rej_fluid": request.data["teh_rej_fluid"],
+                                                             "teh_rej_oil": request.data["teh_rej_oil"]})
             return Response(self.get_serializer(balance, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -167,8 +173,6 @@ class WellViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
         Instantiates and returns the list of permissions that this view requires.
         """
         permission_classes = [IsAuthenticated]
-        if self.action == "add_lesson":
-            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     @action(methods=['get'], detail=False)
