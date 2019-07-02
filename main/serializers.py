@@ -54,5 +54,4 @@ class FieldBalanceCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldBalance
-        fields = ['field', 'transport_balance', 'ansagan_balance', 'transport_brutto', 'ansagan_brutto',
-                  'transport_netto', 'ansagan_netto', 'transport_density', 'ansagan_density',]
+        fields = ['field', 'transport_balance', 'transport_brutto', 'transport_netto', 'transport_density']
