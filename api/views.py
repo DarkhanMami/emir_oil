@@ -73,6 +73,12 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    @action(methods=['get'], detail=False)
+    def get_by_field(self, request, *args, **kwargs):
+        field = models.Field.objects.get(name=request.GET.get("field"))
+        result = models.WellMatrix.objects.filter(well__field=field)
+        return Response(WellMatrixSerializer(result, many=True).data)
+
     @action(methods=['post'], detail=False)
     def create_wellmatrix(self, request, *args, **kwargs):
         serializer = WellMatrixCreateSerializer(data=request.data)
@@ -144,11 +150,11 @@ class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gene
                                                    defaults={"transport_balance": request.data["transport_balance"],
                                                              "transport_brutto": request.data["transport_brutto"],
                                                              "transport_netto": request.data["transport_netto"],
-                                                             "transport_density": request.data["transport_density"],
-                                                             "agzu_fluid": request.data["agzu_fluid"],
-                                                             "agzu_oil": request.data["agzu_oil"],
-                                                             "teh_rej_fluid": request.data["teh_rej_fluid"],
-                                                             "teh_rej_oil": request.data["teh_rej_oil"]})
+                                                             "transport_density": request.data["transport_density"]})
+                                                             # "agzu_fluid": request.data["agzu_fluid"],
+                                                             # "agzu_oil": request.data["agzu_oil"],
+                                                             # "teh_rej_fluid": request.data["teh_rej_fluid"],
+                                                             # "teh_rej_oil": request.data["teh_rej_oil"]})
             return Response(self.get_serializer(balance, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
