@@ -89,6 +89,7 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                                                                                   "teh_rej_fluid": request.data["teh_rej_fluid"],
                                                                                   "teh_rej_oil": request.data["teh_rej_oil"],
                                                                                   "teh_rej_water": request.data["teh_rej_water"],
+                                                                                  "gas": request.data["gas"],
                                                                                   "timestamp": dt})
             return Response(self.get_serializer(wellmatrix, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

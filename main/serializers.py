@@ -36,7 +36,7 @@ class WellMatrixCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WellMatrix
-        fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water']
+        fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas']
 
 
 class FieldBalanceSerializer(serializers.ModelSerializer):
