@@ -121,6 +121,7 @@ class WellMatrix(models.Model):
     teh_rej_fluid = models.FloatField(default=0, db_index=True, verbose_name=_('Техрежим жидкости'))
     teh_rej_oil = models.FloatField(default=0, db_index=True, verbose_name=_('Техрежим нефти'))
     teh_rej_water = models.FloatField(default=0, db_index=True, verbose_name=_('Обводненность'))
+    gas = models.FloatField(default=0, db_index=True, verbose_name=_('Газ'))
     timestamp = models.DateTimeField(blank=False, verbose_name=_('Дата замера'))
 
     class Meta:
