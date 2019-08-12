@@ -160,7 +160,7 @@ class ReverseCalculation(models.Model):
     fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
     density = models.FloatField(default=0, verbose_name=_('Плотность'))
     stop_time = models.FloatField(default=0, verbose_name=_('Простои'))
-    timestamp = models.DateTimeField(blank=False, verbose_name=_('Дата замера'))
+    timestamp = models.DateField(blank=False, verbose_name=_('Дата замера'))
 
     class Meta:
         verbose_name = _("Обратный расчет")
