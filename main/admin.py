@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 from main import models
-from main.models import Field, Well, WellMatrix, FieldBalance
+from main.models import Field, Well, WellMatrix, FieldBalance, ReverseCalculation
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -75,6 +75,12 @@ class WellAdmin(admin.ModelAdmin):
 @admin.register(WellMatrix)
 class WellMatrixAdmin(admin.ModelAdmin):
     list_display = ('well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas', 'timestamp')
+    search_fields = ('well',)
+
+
+@admin.register(ReverseCalculation)
+class ReverseCalculationAdmin(admin.ModelAdmin):
+    list_display = ('well', 'calc_time', 'fluid', 'teh_rej_water', 'density', 'stop_time', 'timestamp')
     search_fields = ('well',)
 
 

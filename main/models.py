@@ -117,11 +117,11 @@ class Well(models.Model):
 
 class WellMatrix(models.Model):
     well = models.ForeignKey(Well, blank=False, null=False, on_delete=models.CASCADE, related_name='wells')
-    fluid = models.FloatField(default=0, db_index=True, verbose_name=_('Замерная жидкость'))
-    teh_rej_fluid = models.FloatField(default=0, db_index=True, verbose_name=_('Техрежим жидкости'))
-    teh_rej_oil = models.FloatField(default=0, db_index=True, verbose_name=_('Техрежим нефти'))
-    teh_rej_water = models.FloatField(default=0, db_index=True, verbose_name=_('Обводненность'))
-    gas = models.FloatField(default=0, db_index=True, verbose_name=_('Газ'))
+    fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
+    teh_rej_fluid = models.FloatField(default=0, verbose_name=_('Техрежим жидкости'))
+    teh_rej_oil = models.FloatField(default=0, verbose_name=_('Техрежим нефти'))
+    teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
+    gas = models.FloatField(default=0, verbose_name=_('Газ'))
     timestamp = models.DateTimeField(blank=False, verbose_name=_('Дата замера'))
 
     class Meta:
@@ -131,23 +131,38 @@ class WellMatrix(models.Model):
 
 class FieldBalance(models.Model):
     field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='bal_fields')
-    transport_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (жидкость)'))
-    ansagan_balance = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (жидкость)'))
-    transport_brutto = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (брутто)'))
-    ansagan_brutto = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (брутто)'))
-    transport_netto = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (нетто)'))
-    ansagan_netto = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (нетто)'))
-    transport_density = models.FloatField(default=0, db_index=True, verbose_name=_('Автомобильные весы (плотность)'))
-    ansagan_density = models.FloatField(default=0, db_index=True, verbose_name=_('Весы по Ансаган (плотность)'))
+    transport_balance = models.FloatField(default=0, verbose_name=_('Автомобильные весы (жидкость)'))
+    ansagan_balance = models.FloatField(default=0, verbose_name=_('Весы по Ансаган (жидкость)'))
+    transport_brutto = models.FloatField(default=0, verbose_name=_('Автомобильные весы (брутто)'))
+    ansagan_brutto = models.FloatField(default=0, verbose_name=_('Весы по Ансаган (брутто)'))
+    transport_netto = models.FloatField(default=0, verbose_name=_('Автомобильные весы (нетто)'))
+    ansagan_netto = models.FloatField(default=0, verbose_name=_('Весы по Ансаган (нетто)'))
+    transport_density = models.FloatField(default=0, verbose_name=_('Автомобильные весы (плотность)'))
+    ansagan_density = models.FloatField(default=0, verbose_name=_('Весы по Ансаган (плотность)'))
 
-    agzu_fluid = models.FloatField(default=0, db_index=True, verbose_name=_('Замер жидкости по скважинам'))
-    agzu_oil = models.FloatField(default=0, db_index=True, verbose_name=_('Замер нефти по скважинам'))
-    teh_rej_fluid = models.FloatField(default=0, db_index=True, verbose_name=_('Замер по Тех. жидкости'))
-    teh_rej_oil = models.FloatField(default=0, db_index=True, verbose_name=_('Замер по Тех. нефти'))
+    agzu_fluid = models.FloatField(default=0, verbose_name=_('Замер жидкости по скважинам'))
+    agzu_oil = models.FloatField(default=0, verbose_name=_('Замер нефти по скважинам'))
+    teh_rej_fluid = models.FloatField(default=0, verbose_name=_('Замер по Тех. жидкости'))
+    teh_rej_oil = models.FloatField(default=0, verbose_name=_('Замер по Тех. нефти'))
 
     timestamp = models.DateField(blank=False, verbose_name=_('Дата замера'))
 
     class Meta:
         verbose_name = _("Баланс по месторождению")
         verbose_name_plural = _("Баланс по месторождениям")
+
+
+class ReverseCalculation(models.Model):
+    well = models.ForeignKey(Well, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_wells')
+
+    calc_time = models.FloatField(default=0, verbose_name=_('Время замера'))
+    teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
+    fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
+    density = models.FloatField(default=0, verbose_name=_('Плотность'))
+    stop_time = models.FloatField(default=0, verbose_name=_('Простои'))
+    timestamp = models.DateTimeField(blank=False, verbose_name=_('Дата замера'))
+
+    class Meta:
+        verbose_name = _("Обратный расчет")
+        verbose_name_plural = _("Обратные расчеты")
 

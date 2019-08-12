@@ -84,6 +84,7 @@ ADMIN_REORDER = (
     {'app': 'main', 'label': 'Диспетчерское меню', 'models': (
         'main.WellMatrix',
         'main.FieldBalance',
+        'main.ReverseCalculation'
     )},
 
 )

@@ -20,7 +20,7 @@ from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
-    FieldBalanceSerializer, FieldBalanceCreateSerializer
+    FieldBalanceSerializer, FieldBalanceCreateSerializer, ReverseCalculationSerializer
 from django.core.mail import EmailMessage
 
 
@@ -93,6 +93,36 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                                                                                   "timestamp": dt})
             return Response(self.get_serializer(wellmatrix, many=False).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('well',)
+    queryset = models.ReverseCalculation.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.ReverseCalculation.objects.all()
+
+    def get_serializer_class(self):
+        return ReverseCalculationSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_by_field(self, request, *args, **kwargs):
+        field = models.Field.objects.get(name=request.GET.get("field"))
+        result = models.ReverseCalculation.objects.filter(well__field=field)
+        return Response(ReverseCalculationSerializer(result, many=True).data)
+
 
 
 class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
