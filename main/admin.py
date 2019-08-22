@@ -80,7 +80,8 @@ class WellMatrixAdmin(admin.ModelAdmin):
 
 @admin.register(ReverseCalculation)
 class ReverseCalculationAdmin(admin.ModelAdmin):
-    list_display = ('well', 'calc_time', 'fluid', 'teh_rej_water', 'density', 'stop_time', 'timestamp')
+    list_display = ('well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
+                    'density', 'stop_time', 'timestamp')
     search_fields = ('well',)
 
 

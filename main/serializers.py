@@ -36,7 +36,8 @@ class ReverseCalculationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ReverseCalculation
-        fields = ['well', 'calc_time', 'fluid', 'teh_rej_water', 'density', 'stop_time', 'timestamp']
+        fields = ['well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
+                  'density', 'stop_time', 'timestamp']
 
 
 class WellMatrixCreateSerializer(serializers.ModelSerializer):

@@ -156,6 +156,8 @@ class ReverseCalculation(models.Model):
     well = models.ForeignKey(Well, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_wells')
 
     calc_time = models.FloatField(default=0, verbose_name=_('Время замера'))
+    teh_rej_fluid = models.FloatField(default=0, verbose_name=_('Техрежим жидкости'))
+    teh_rej_oil = models.FloatField(default=0, verbose_name=_('Техрежим нефти'))
     teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
     fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
     density = models.FloatField(default=0, verbose_name=_('Плотность'))
