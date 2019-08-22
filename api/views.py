@@ -124,7 +124,7 @@ class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin
         result = models.ReverseCalculation.objects.filter(well__field=field)
         return Response(ReverseCalculationSerializer(result, many=True).data)
 
-    @action(methods=['get'], detail=False)
+    @action(methods=['post'], detail=False)
     def add_today_data(self, request, *args, **kwargs):
         today = date.today()
         if models.ReverseCalculation.objects.filter(timestamp=today).exists():
