@@ -21,6 +21,7 @@ from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
     FieldBalanceSerializer, FieldBalanceCreateSerializer, ReverseCalculationSerializer
+from datetime import date
 from django.core.mail import EmailMessage
 
 
@@ -122,6 +123,20 @@ class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin
         field = models.Field.objects.get(name=request.GET.get("field"))
         result = models.ReverseCalculation.objects.filter(well__field=field)
         return Response(ReverseCalculationSerializer(result, many=True).data)
+
+    @action(methods=['get'], detail=False)
+    def add_today_data(self, request, *args, **kwargs):
+        today = date.today()
+        if models.ReverseCalculation.objects.filter(timestamp=today).exists():
+            return Response("Data exists")
+        else:
+            last_day = models.ReverseCalculation.objects.order_by('-timestamp').first().timestamp
+            data = models.ReverseCalculation.objects.filter(timestamp=last_day)
+            for item in data:
+                item.pk = None
+                item.timestamp = today
+                item.save()
+            return Response("Success")
 
 
 
