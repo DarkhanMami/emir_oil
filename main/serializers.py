@@ -12,7 +12,7 @@ class EmptySerializer(serializers.Serializer):
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
-        fields = ['name']
+        fields = ['name', 'density']
 
 
 class WellSerializer(serializers.ModelSerializer):
@@ -28,16 +28,32 @@ class WellMatrixSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WellMatrix
-        fields = ['well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas', 'timestamp']
+        fields = ['well', 'fluid', 'gas', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas', 'timestamp']
 
 
-class ReverseCalculationSerializer(serializers.ModelSerializer):
+class ProductionSerializer(serializers.ModelSerializer):
     well = WellSerializer(many=False, read_only=True)
 
     class Meta:
-        model = ReverseCalculation
+        model = Production
         fields = ['well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
                   'density', 'stop_time', 'timestamp']
+
+
+class ParkProductionSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ParkProduction
+        fields = ['field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'teh_rej_water', 'needs', 'pump', 'timestamp']
+
+
+# class ReverseCalculationSerializer(serializers.ModelSerializer):
+#     field = FieldSerializer(many=False, read_only=True)
+#
+#     class Meta:
+#         model = ReverseCalculation
+#         fields = ['field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp']
 
 
 class WellMatrixCreateSerializer(serializers.ModelSerializer):

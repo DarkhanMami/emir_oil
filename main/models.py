@@ -94,6 +94,7 @@ class User(AbstractBaseUser):
 
 class Field(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False, unique=True, db_index=True, verbose_name=_('Название'))
+    density = models.FloatField(default=0.8, verbose_name=_('Плотность'))
 
     class Meta:
         verbose_name = _("Месторождение")
@@ -152,19 +153,49 @@ class FieldBalance(models.Model):
         verbose_name_plural = _("Баланс по месторождениям")
 
 
-class ReverseCalculation(models.Model):
+class Production(models.Model):
     well = models.ForeignKey(Well, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_wells')
-
     calc_time = models.FloatField(default=0, verbose_name=_('Время замера'))
     teh_rej_fluid = models.FloatField(default=0, verbose_name=_('Техрежим жидкости'))
     teh_rej_oil = models.FloatField(default=0, verbose_name=_('Техрежим нефти'))
     teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
     fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
+    gas = models.FloatField(default=0, verbose_name=_('Газ'))
     density = models.FloatField(default=0, verbose_name=_('Плотность'))
     stop_time = models.FloatField(default=0, verbose_name=_('Простои'))
-    timestamp = models.DateField(blank=False, verbose_name=_('Дата замера'))
+    timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
 
     class Meta:
-        verbose_name = _("Обратный расчет")
-        verbose_name_plural = _("Обратные расчеты")
+        verbose_name = _("Замерная добыча")
+        verbose_name_plural = _("Замерные добычи")
+
+
+class ParkProduction(models.Model):
+    field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='park_fields')
+    fluid_beg = models.FloatField(default=0, verbose_name=_('Жидкость на начало'))
+    fluid_end = models.FloatField(default=0, verbose_name=_('Жидкость на конец'))
+    teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
+    fluid_brutto = models.FloatField(default=0, verbose_name=_('Добыча по весам (брутто)'))
+    needs = models.FloatField(default=0, verbose_name=_('Собственные нужды'))
+    pump = models.FloatField(default=0, verbose_name=_('Откачки воды'))
+    timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
+
+    class Meta:
+        verbose_name = _("Замерная добыча")
+        verbose_name_plural = _("Замерные добычи")
+
+
+# class ReverseCalculation(models.Model):
+#     field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_fields')
+#     fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
+#     oil = models.FloatField(default=0, verbose_name=_('Замерная нефть'))
+#     park_fluid = models.FloatField(default=0, verbose_name=_('Парковая жидкость'))
+#     park_oil = models.FloatField(default=0, verbose_name=_('Парковая нефть'))
+#     coeff_fluid = models.FloatField(default=0, verbose_name=_('Парковый коэф. жидкости'))
+#     coeff_oil = models.FloatField(default=0, verbose_name=_('Парковый коэф. нефти'))
+#     timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
+#
+#     class Meta:
+#         verbose_name = _("Обратный расчет")
+#         verbose_name_plural = _("Обратные расчеты")
 

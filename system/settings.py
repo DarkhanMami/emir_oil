@@ -45,7 +45,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'admin_reorder.middleware.ModelAdminReorder',
-
 ]
 
 
@@ -84,7 +83,9 @@ ADMIN_REORDER = (
     {'app': 'main', 'label': 'Диспетчерское меню', 'models': (
         'main.WellMatrix',
         'main.FieldBalance',
-        'main.ReverseCalculation'
+        'main.Production',
+        'main.ParkProduction',
+        'main.ReverseCalculation',
     )},
 
 )

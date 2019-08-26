@@ -20,7 +20,8 @@ from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
-    FieldBalanceSerializer, FieldBalanceCreateSerializer, ReverseCalculationSerializer
+    FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer
+    # ReverseCalculationSerializer
 from datetime import date
 from django.core.mail import EmailMessage
 
@@ -96,20 +97,20 @@ class WellMatrixViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('well',)
-    queryset = models.ReverseCalculation.objects.all()
+    queryset = models.Production.objects.all()
 
     def get_serializer_context(self):
         return {'request': self.request}
 
     def get_queryset(self):
-        return models.ReverseCalculation.objects.all()
+        return models.Production.objects.all()
 
     def get_serializer_class(self):
-        return ReverseCalculationSerializer
+        return ProductionSerializer
 
     def get_permissions(self):
         """
@@ -121,23 +122,108 @@ class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin
     @action(methods=['get'], detail=False)
     def get_by_field(self, request, *args, **kwargs):
         field = models.Field.objects.get(name=request.GET.get("field"))
-        result = models.ReverseCalculation.objects.filter(well__field=field)
-        return Response(ReverseCalculationSerializer(result, many=True).data)
+        result = models.Production.objects.filter(well__field=field)
+        return Response(ProductionSerializer(result, many=True).data)
 
     @action(methods=['post'], detail=False)
     def add_today_data(self, request, *args, **kwargs):
         today = date.today()
-        if models.ReverseCalculation.objects.filter(timestamp=today).exists():
+        if models.Production.objects.filter(timestamp=today).exists():
             return Response("Data exists")
         else:
-            last_day = models.ReverseCalculation.objects.order_by('-timestamp').first().timestamp
-            data = models.ReverseCalculation.objects.filter(timestamp=last_day)
+            last_day = models.Production.objects.order_by('-timestamp').first().timestamp
+            data = models.Production.objects.filter(timestamp=last_day)
             for item in data:
                 item.pk = None
                 item.timestamp = today
                 item.save()
             return Response("Success")
 
+
+class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('field',)
+    queryset = models.ParkProduction.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.ParkProduction.objects.all()
+
+    def get_serializer_class(self):
+        return ParkProductionSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_by_field(self, request, *args, **kwargs):
+        field = models.Field.objects.get(name=request.GET.get("field"))
+        result = models.ParkProduction.objects.filter(well__field=field)
+        return Response(ParkProductionSerializer(result, many=True).data)
+
+    @action(methods=['post'], detail=False)
+    def add_today_data(self, request, *args, **kwargs):
+        today = date.today()
+        if models.ParkProduction.objects.filter(timestamp=today).exists():
+            return Response("Data exists")
+        else:
+            last_day = models.ParkProduction.objects.order_by('-timestamp').first().timestamp
+            data = models.Production.objects.filter(timestamp=last_day)
+            for item in data:
+                item.pk = None
+                item.timestamp = today
+                item.save()
+            return Response("Success")
+
+
+# class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+#
+#     filter_backends = (filters.DjangoFilterBackend,)
+#     filter_fields = ('field',)
+#     queryset = models.ReverseCalculation.objects.all()
+#
+#     def get_serializer_context(self):
+#         return {'request': self.request}
+#
+#     def get_queryset(self):
+#         return models.ReverseCalculation.objects.all()
+#
+#     def get_serializer_class(self):
+#         return ReverseCalculationSerializer
+#
+#     def get_permissions(self):
+#         """
+#         Instantiates and returns the list of permissions that this view requires.
+#         """
+#         permission_classes = [IsAuthenticated]
+#         return [permission() for permission in permission_classes]
+#
+#     @action(methods=['get'], detail=False)
+#     def get_by_field(self, request, *args, **kwargs):
+#         field = models.Field.objects.get(name=request.GET.get("field"))
+#         result = models.ReverseCalculation.objects.filter(well__field=field)
+#         return Response(ReverseCalculationSerializer(result, many=True).data)
+#
+#     @action(methods=['post'], detail=False)
+#     def add_today_data(self, request, *args, **kwargs):
+#         today = date.today()
+#         if models.ReverseCalculation.objects.filter(timestamp=today).exists():
+#             return Response("Data exists")
+#         else:
+#             last_day = models.ReverseCalculation.objects.order_by('-timestamp').first().timestamp
+#             data = models.ReverseCalculation.objects.filter(timestamp=last_day)
+#             for item in data:
+#                 item.pk = None
+#                 item.timestamp = today
+#                 item.save()
+#             return Response("Success")
 
 
 class FieldBalanceViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
@@ -254,6 +340,4 @@ class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericView
         Instantiates and returns the list of permissions that this view requires.
         """
         permission_classes = [IsAuthenticated]
-        if self.action == "add_lesson":
-            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 from main import models
-from main.models import Field, Well, WellMatrix, FieldBalance, ReverseCalculation
+from main.models import Field, Well, WellMatrix, FieldBalance, Production, ParkProduction
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -62,7 +62,7 @@ admin.site.unregister(Group)
 
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'density')
 
 
 @admin.register(Well)
@@ -74,15 +74,27 @@ class WellAdmin(admin.ModelAdmin):
 
 @admin.register(WellMatrix)
 class WellMatrixAdmin(admin.ModelAdmin):
-    list_display = ('well', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas', 'timestamp')
+    list_display = ('well', 'fluid', 'gas', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water', 'gas', 'timestamp')
     search_fields = ('well',)
 
 
-@admin.register(ReverseCalculation)
-class ReverseCalculationAdmin(admin.ModelAdmin):
+@admin.register(Production)
+class ProductionAdmin(admin.ModelAdmin):
     list_display = ('well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
                     'density', 'stop_time', 'timestamp')
     search_fields = ('well',)
+
+
+@admin.register(ParkProduction)
+class ParkProductionAdmin(admin.ModelAdmin):
+    list_display = ('field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'teh_rej_water', 'needs', 'pump', 'timestamp')
+    list_filter = ('field',)
+
+
+# @admin.register(ReverseCalculation)
+# class ReverseCalculationAdmin(admin.ModelAdmin):
+#     list_display = ('field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp')
+#     list_filter = ('field',)
 
 
 @admin.register(FieldBalance)
