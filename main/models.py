@@ -181,8 +181,8 @@ class ParkProduction(models.Model):
     timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
 
     class Meta:
-        verbose_name = _("Замерная добыча")
-        verbose_name_plural = _("Замерные добычи")
+        verbose_name = _("Парковая добыча")
+        verbose_name_plural = _("Парковые добычи")
 
 
 class ReverseCalculation(models.Model):
