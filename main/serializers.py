@@ -48,12 +48,12 @@ class ParkProductionSerializer(serializers.ModelSerializer):
         fields = ['field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'teh_rej_water', 'needs', 'pump', 'timestamp']
 
 
-# class ReverseCalculationSerializer(serializers.ModelSerializer):
-#     field = FieldSerializer(many=False, read_only=True)
-#
-#     class Meta:
-#         model = ReverseCalculation
-#         fields = ['field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp']
+class ReverseCalculationSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ReverseCalculation
+        fields = ['field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp']
 
 
 class WellMatrixCreateSerializer(serializers.ModelSerializer):

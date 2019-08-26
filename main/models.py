@@ -185,17 +185,17 @@ class ParkProduction(models.Model):
         verbose_name_plural = _("Замерные добычи")
 
 
-# class ReverseCalculation(models.Model):
-#     field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_fields')
-#     fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
-#     oil = models.FloatField(default=0, verbose_name=_('Замерная нефть'))
-#     park_fluid = models.FloatField(default=0, verbose_name=_('Парковая жидкость'))
-#     park_oil = models.FloatField(default=0, verbose_name=_('Парковая нефть'))
-#     coeff_fluid = models.FloatField(default=0, verbose_name=_('Парковый коэф. жидкости'))
-#     coeff_oil = models.FloatField(default=0, verbose_name=_('Парковый коэф. нефти'))
-#     timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
-#
-#     class Meta:
-#         verbose_name = _("Обратный расчет")
-#         verbose_name_plural = _("Обратные расчеты")
+class ReverseCalculation(models.Model):
+    field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='rev_fields')
+    fluid = models.FloatField(default=0, verbose_name=_('Замерная жидкость'))
+    oil = models.FloatField(default=0, verbose_name=_('Замерная нефть'))
+    park_fluid = models.FloatField(default=0, verbose_name=_('Парковая жидкость'))
+    park_oil = models.FloatField(default=0, verbose_name=_('Парковая нефть'))
+    coeff_fluid = models.FloatField(default=0, verbose_name=_('Парковый коэф. жидкости'))
+    coeff_oil = models.FloatField(default=0, verbose_name=_('Парковый коэф. нефти'))
+    timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
+
+    class Meta:
+        verbose_name = _("Обратный расчет")
+        verbose_name_plural = _("Обратные расчеты")
 

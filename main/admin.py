@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 from main import models
-from main.models import Field, Well, WellMatrix, FieldBalance, Production, ParkProduction
+from main.models import Field, Well, WellMatrix, FieldBalance, Production, ParkProduction, ReverseCalculation
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -91,10 +91,10 @@ class ParkProductionAdmin(admin.ModelAdmin):
     list_filter = ('field',)
 
 
-# @admin.register(ReverseCalculation)
-# class ReverseCalculationAdmin(admin.ModelAdmin):
-#     list_display = ('field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp')
-#     list_filter = ('field',)
+@admin.register(ReverseCalculation)
+class ReverseCalculationAdmin(admin.ModelAdmin):
+    list_display = ('field', 'fluid', 'oil', 'park_fluid', 'park_oil', 'coeff_fluid', 'coeff_oil', 'timestamp')
+    list_filter = ('field',)
 
 
 @admin.register(FieldBalance)
