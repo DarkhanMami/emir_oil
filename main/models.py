@@ -176,6 +176,7 @@ class ParkProduction(models.Model):
     fluid_end = models.FloatField(default=0, verbose_name=_('Жидкость на конец'))
     teh_rej_water = models.FloatField(default=0, verbose_name=_('Обводненность'))
     fluid_brutto = models.FloatField(default=0, verbose_name=_('Добыча по весам (брутто)'))
+    fluid_netto = models.FloatField(default=0, verbose_name=_('Добыча по весам (нетто)'))
     needs = models.FloatField(default=0, verbose_name=_('Собственные нужды'))
     pump = models.FloatField(default=0, verbose_name=_('Откачки воды'))
     timestamp = models.DateField(blank=False, verbose_name=_('Дата'))

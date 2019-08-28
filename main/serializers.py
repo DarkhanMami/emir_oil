@@ -45,7 +45,7 @@ class ParkProductionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ParkProduction
-        fields = ['field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'teh_rej_water', 'needs', 'pump', 'timestamp']
+        fields = ['field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'fluid_netto', 'teh_rej_water', 'needs', 'pump', 'timestamp']
 
 
 class ReverseCalculationSerializer(serializers.ModelSerializer):

@@ -87,7 +87,7 @@ class ProductionAdmin(admin.ModelAdmin):
 
 @admin.register(ParkProduction)
 class ParkProductionAdmin(admin.ModelAdmin):
-    list_display = ('field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'teh_rej_water', 'needs', 'pump', 'timestamp')
+    list_display = ('field', 'fluid_beg', 'fluid_end', 'fluid_brutto', 'fluid_netto', 'teh_rej_water', 'needs', 'pump', 'timestamp')
     list_filter = ('field',)
 
 
