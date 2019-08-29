@@ -137,6 +137,11 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                 item.pk = None
                 item.timestamp = today
                 item.save()
+            data = models.ParkProduction.objects.filter(timestamp=last_day)
+            for item in data:
+                item.pk = None
+                item.timestamp = today
+                item.save()
             return Response("Success")
 
 
