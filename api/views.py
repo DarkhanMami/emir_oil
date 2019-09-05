@@ -134,6 +134,14 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
             last_day = models.Production.objects.order_by('-timestamp').first().timestamp
             data = models.Production.objects.filter(timestamp=last_day)
             for item in data:
+                if models.WellMatrix.objects.filter(well=item.well).exists():
+                    matrix = models.WellMatrix.objects.get(well=item.well)
+                    matrix.fluid = item.fluid
+                    matrix.teh_rej_fluid = item.teh_rej_fluid
+                    matrix.teh_rej_oil = item.teh_rej_oil
+                    matrix.teh_rej_water = item.teh_rej_water
+                    matrix.gas = item.gas
+                    matrix.save()
                 item.pk = None
                 item.timestamp = today
                 item.save()
