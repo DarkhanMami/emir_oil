@@ -119,11 +119,18 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    @action(methods=['get'], detail=False)
-    def get_by_field(self, request, *args, **kwargs):
-        field = models.Field.objects.get(name=request.GET.get("field"))
-        result = models.Production.objects.filter(well__field=field)
-        return Response(ProductionSerializer(result, many=True).data)
+    @action(methods=['post'], detail=False)
+    def update_table(self, request, *args, **kwargs):
+        data = request.data["data"]
+        for item in data:
+            well = models.Well.objects.get(name=item[2])
+            models.Production.objects.update_or_create(well=well, defaults={"calc_time": item[3],
+                                                                            "fluid": item[4],
+                                                                            "teh_rej_fluid": item[5],
+                                                                            "teh_rej_oil": item[6],
+                                                                            "teh_rej_water": item[7],
+                                                                            "stop_time": item[8]})
+        return Response("OK")
 
     @action(methods=['post'], detail=False)
     def add_today_data(self, request, *args, **kwargs):
