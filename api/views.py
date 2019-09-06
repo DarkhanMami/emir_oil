@@ -125,13 +125,14 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         for item in data:
             if models.Well.objects.filter(name=item[2]).exists():
                 well = models.Well.objects.get(name=item[2])
-                models.Production.objects.update_or_create(well=well, defaults={"calc_time": item[3],
-                                                                                "fluid": item[4],
-                                                                                "teh_rej_fluid": item[5],
-                                                                                "teh_rej_oil": item[6],
-                                                                                "teh_rej_water": item[7],
-                                                                                "stop_time": item[8]})
-            else:
+                dt = datetime.strptime(item[0], '%Y-%m-%d')
+                models.Production.objects.update_or_create(well=well, timestamp=dt, defaults={"calc_time": item[3],
+                                                                                            "fluid": item[4],
+                                                                                            "teh_rej_fluid": item[5],
+                                                                                            "teh_rej_oil": item[6],
+                                                                                            "teh_rej_water": item[7],
+                                                                                            "stop_time": item[8]})
+        else:
                 pass
         return Response("OK")
 
