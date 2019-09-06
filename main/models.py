@@ -163,7 +163,7 @@ class Production(models.Model):
     gas = models.FloatField(default=0, verbose_name=_('Газ'))
     density = models.FloatField(default=0, verbose_name=_('Плотность'))
     stop_time = models.FloatField(default=0, verbose_name=_('Простои'))
-    timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
+    timestamp = models.DateField(blank=True, null=True, verbose_name=_('Дата'))
 
     class Meta:
         verbose_name = _("Замерная добыча")

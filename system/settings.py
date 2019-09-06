@@ -86,6 +86,7 @@ ADMIN_REORDER = (
         'main.Production',
         'main.ParkProduction',
         'main.ReverseCalculation',
+        # 'authtoken.Token'
     )},
 
 )

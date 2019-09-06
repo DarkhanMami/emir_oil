@@ -123,13 +123,16 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
     def update_table(self, request, *args, **kwargs):
         data = request.data["data"]
         for item in data:
-            well = models.Well.objects.get(name=item[2])
-            models.Production.objects.update_or_create(well=well, defaults={"calc_time": item[3],
-                                                                            "fluid": item[4],
-                                                                            "teh_rej_fluid": item[5],
-                                                                            "teh_rej_oil": item[6],
-                                                                            "teh_rej_water": item[7],
-                                                                            "stop_time": item[8]})
+            if models.Well.objects.filter(name=item[2]).exists():
+                well = models.Well.objects.get(name=item[2])
+                models.Production.objects.update_or_create(well=well, defaults={"calc_time": item[3],
+                                                                                "fluid": item[4],
+                                                                                "teh_rej_fluid": item[5],
+                                                                                "teh_rej_oil": item[6],
+                                                                                "teh_rej_water": item[7],
+                                                                                "stop_time": item[8]})
+            else:
+                pass
         return Response("OK")
 
     @action(methods=['post'], detail=False)
