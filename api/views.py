@@ -190,7 +190,7 @@ class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
     def update_table(self, request, *args, **kwargs):
         data = request.data["data"]
         for item in data:
-            if models.Well.objects.filter(name=item[2]).exists():
+            if models.Field.objects.filter(name=item[1]).exists():
                 field = models.Field.objects.get(name=item[1])
                 dt = datetime.strptime(item[0], '%Y-%m-%d')
                 models.ParkProduction.objects.update_or_create(field=field, timestamp=dt,
