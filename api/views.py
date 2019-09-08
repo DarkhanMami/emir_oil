@@ -186,25 +186,24 @@ class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    @action(methods=['get'], detail=False)
-    def get_by_field(self, request, *args, **kwargs):
-        field = models.Field.objects.get(name=request.GET.get("field"))
-        result = models.ParkProduction.objects.filter(well__field=field)
-        return Response(ParkProductionSerializer(result, many=True).data)
-
     @action(methods=['post'], detail=False)
-    def add_today_data(self, request, *args, **kwargs):
-        today = date.today()
-        if models.ParkProduction.objects.filter(timestamp=today).exists():
-            return Response("Data exists")
+    def update_table(self, request, *args, **kwargs):
+        data = request.data["data"]
+        for item in data:
+            if models.Well.objects.filter(name=item[2]).exists():
+                field = models.Field.objects.get(name=item[1])
+                dt = datetime.strptime(item[0], '%Y-%m-%d')
+                models.ParkProduction.objects.update_or_create(field=field, timestamp=dt,
+                                                               defaults={"fluid_beg": item[2],
+                                                                         "fluid_end": item[3],
+                                                                         "teh_rej_water": item[4],
+                                                                         "fluid_brutto": item[5],
+                                                                         "fluid_netto": item[6],
+                                                                         "needs": item[7],
+                                                                         "pump": item[8]})
         else:
-            last_day = models.ParkProduction.objects.order_by('-timestamp').first().timestamp
-            data = models.Production.objects.filter(timestamp=last_day)
-            for item in data:
-                item.pk = None
-                item.timestamp = today
-                item.save()
-            return Response("Success")
+            pass
+        return Response("OK")
 
 
 class ReverseCalculationViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
