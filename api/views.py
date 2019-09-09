@@ -132,8 +132,15 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                                                                                             "teh_rej_oil": item[6],
                                                                                             "teh_rej_water": item[7],
                                                                                             "stop_time": item[8]})
-        else:
-                pass
+                if models.WellMatrix.objects.filter(well=well).exists():
+                    matrix = models.WellMatrix.objects.get(well=well)
+                    matrix.fluid = item[4]
+                    matrix.teh_rej_fluid = item[5]
+                    matrix.teh_rej_oil = item[6]
+                    matrix.teh_rej_water = item[7]
+                    matrix.save()
+            else:
+                    pass
         return Response("OK")
 
     @action(methods=['post'], detail=False)
