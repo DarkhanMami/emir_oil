@@ -164,20 +164,7 @@ class Production(models.Model):
     density = models.FloatField(default=0, verbose_name=_('Плотность'))
     stop_time = models.FloatField(default=0, verbose_name=_('Простои'))
     timestamp = models.DateField(blank=True, null=True, verbose_name=_('Дата'))
-
-    MECHANIC = "Механик"
-    TECHNOLOGIST = "Технолог"
-    ELECTRICIAN = "Электрик"
-    KIP = "КИП"
-
-    INIT_CHOICES = (
-        (MECHANIC, _('Механик')),
-        (TECHNOLOGIST, _('Технолог')),
-        (ELECTRICIAN, _('Электрик')),
-        (KIP, _('КИП')),
-    )
-
-    stop_init = models.CharField(choices=INIT_CHOICES, default=MECHANIC, max_length=20, verbose_name=_("Инициатор остановки"))
+    stop_init = models.CharField(blank=True, null=True, max_length=20, verbose_name=_("Инициатор остановки"))
     stop_reason = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Причина остановки'))
     status = models.BooleanField(default=True, verbose_name=_('Статус'))
 
