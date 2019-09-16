@@ -149,10 +149,10 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
             if models.Well.objects.filter(name=item[2]).exists():
                 well = models.Well.objects.get(name=item[2])
                 dt = datetime.strptime(item[0], '%Y-%m-%d')
-                models.Production.objects.update_or_create(well=well, timestamp=dt, defaults={"stop_time": item[8],
-                                                                                              "stop_init": item[9],
-                                                                                              "stop_reason": item[10],
-                                                                                              "status": item[11]})
+                models.Production.objects.update_or_create(well=well, timestamp=dt, defaults={"stop_time": item[3],
+                                                                                              "stop_init": item[4],
+                                                                                              "stop_reason": item[5],
+                                                                                              "status": item[6]})
             else:
                 pass
         return Response("OK")
