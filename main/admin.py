@@ -81,7 +81,7 @@ class WellMatrixAdmin(admin.ModelAdmin):
 @admin.register(Production)
 class ProductionAdmin(admin.ModelAdmin):
     list_display = ('well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
-                    'density', 'stop_time', 'timestamp')
+                    'density', 'stop_time', 'timestamp', 'stop_init', 'stop_reason', 'status')
     search_fields = ('well',)
 
 

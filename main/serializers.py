@@ -37,7 +37,7 @@ class ProductionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Production
         fields = ['well', 'calc_time', 'fluid', 'teh_rej_fluid', 'teh_rej_oil', 'teh_rej_water',
-                  'density', 'stop_time', 'timestamp']
+                  'density', 'stop_time', 'timestamp', 'stop_init', 'stop_reason', 'status']
 
 
 class ParkProductionSerializer(serializers.ModelSerializer):

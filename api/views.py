@@ -130,8 +130,7 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                                                                                             "fluid": item[4],
                                                                                             "teh_rej_fluid": item[5],
                                                                                             "teh_rej_oil": item[6],
-                                                                                            "teh_rej_water": item[7],
-                                                                                            "stop_time": item[8]})
+                                                                                            "teh_rej_water": item[7]})
                 if models.WellMatrix.objects.filter(well=well).exists():
                     matrix = models.WellMatrix.objects.get(well=well)
                     matrix.fluid = item[4]
@@ -141,6 +140,21 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
                     matrix.save()
             else:
                     pass
+        return Response("OK")
+
+    @action(methods=['post'], detail=False)
+    def update_stop(self, request, *args, **kwargs):
+        data = request.data["data"]
+        for item in data:
+            if models.Well.objects.filter(name=item[2]).exists():
+                well = models.Well.objects.get(name=item[2])
+                dt = datetime.strptime(item[0], '%Y-%m-%d')
+                models.Production.objects.update_or_create(well=well, timestamp=dt, defaults={"stop_time": item[8],
+                                                                                              "stop_init": item[9],
+                                                                                              "stop_reason": item[10],
+                                                                                              "status": item[11]})
+            else:
+                pass
         return Response("OK")
 
     @action(methods=['post'], detail=False)
