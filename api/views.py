@@ -107,7 +107,7 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         return {'request': self.request}
 
     def get_queryset(self):
-        return models.Production.objects.all()
+        return None
 
     def get_serializer_class(self):
         return ProductionSerializer
@@ -118,6 +118,12 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         """
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_all(self, request, *args, **kwargs):
+        with open('json_data/production.json') as json_file:
+            params = json.load(json_file)
+        return Response(params)
 
     @action(methods=['post'], detail=False)
     def update_table(self, request, *args, **kwargs):
@@ -195,7 +201,7 @@ class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
         return {'request': self.request}
 
     def get_queryset(self):
-        return models.ParkProduction.objects.all()
+        return None
 
     def get_serializer_class(self):
         return ParkProductionSerializer
@@ -206,6 +212,12 @@ class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
         """
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_all(self, request, *args, **kwargs):
+        with open('json_data/park_production.json') as json_file:
+            params = json.load(json_file)
+        return Response(params)
 
     @action(methods=['post'], detail=False)
     def update_table(self, request, *args, **kwargs):
