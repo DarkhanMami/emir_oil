@@ -120,6 +120,14 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
         return [permission() for permission in permission_classes]
 
     @action(methods=['get'], detail=False)
+    def get_by_month(self, request, *args, **kwargs):
+        result = models.Production.objects.filter(timestamp__year__gte=2019,
+                                                  timestamp__month__gte=request.GET.get("month"),
+                                                  timestamp__year__lte=2019,
+                                                  timestamp__month__lte=request.GET.get("month"))
+        return Response(ProductionSerializer(result, many=True).data)
+
+    @action(methods=['get'], detail=False)
     def get_all(self, request, *args, **kwargs):
         with open('json_data/production.json') as json_file:
             params = json.load(json_file)
@@ -212,6 +220,14 @@ class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
         """
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_by_month(self, request, *args, **kwargs):
+        result = models.ParkProduction.objects.filter(timestamp__year__gte=2019,
+                                                      timestamp__month__gte=request.GET.get("month"),
+                                                      timestamp__year__lte=2019,
+                                                      timestamp__month__lte=request.GET.get("month"))
+        return Response(ParkProductionSerializer(result, many=True).data)
 
     @action(methods=['get'], detail=False)
     def get_all(self, request, *args, **kwargs):
