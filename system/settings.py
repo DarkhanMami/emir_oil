@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@7w5)c63v6yzmj@=d9$($3xao1tjw667h4(kof#2b6g=3)p7-r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # Application definition
@@ -208,6 +208,6 @@ MAX_UPLOAD_SIZE = "524288000"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'poseidonalakol@gmail.com'
-EMAIL_HOST_PASSWORD = 'pos12345'
+EMAIL_HOST_USER = 'emir.report@gmail.com'
+EMAIL_HOST_PASSWORD = 'Qw0zxc13TteD'
 EMAIL_PORT = 587

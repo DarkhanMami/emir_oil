@@ -4,4 +4,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('generate_production', views.generate_production),
     path('generate_park_production', views.generate_park_production),
+    path('get_mail_report', views.get_mail_report),
 ]
