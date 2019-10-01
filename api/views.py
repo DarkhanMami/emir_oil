@@ -20,7 +20,7 @@ from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
-    FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer
+    FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer, ReportExcelSerializer
 from datetime import date
 from django.core.mail import EmailMessage
 
@@ -369,3 +369,34 @@ class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericView
         """
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+
+class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('field',)
+    queryset = models.ReportExcel.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.ReportExcel.objects.all()
+
+    def get_serializer_class(self):
+        return ReportExcelSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    @action(methods=['get'], detail=False)
+    def get_by_month(self, request, *args, **kwargs):
+        result = models.ReportExcel.objects.filter(timestamp__year__gte=2019,
+                                                  timestamp__month__gte=request.GET.get("month"),
+                                                  timestamp__year__lte=2019,
+                                                  timestamp__month__lte=request.GET.get("month"))
+        return Response(ReportExcelSerializer(result, many=True).data)

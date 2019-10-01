@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import Group
 
 from main import models
-from main.models import Field, Well, WellMatrix, FieldBalance, Production, ParkProduction
+from main.models import Field, Well, WellMatrix, FieldBalance, Production, ParkProduction, ReportExcel
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -97,3 +97,12 @@ class FieldBalanceAdmin(admin.ModelAdmin):
                     'transport_netto', 'ansagan_netto', 'transport_density', 'ansagan_density',
                     'agzu_fluid', 'agzu_oil', 'teh_rej_fluid', 'teh_rej_oil', 'timestamp')
     list_filter = ('field',)
+
+
+@admin.register(ReportExcel)
+class ReportExcelAdmin(admin.ModelAdmin):
+    list_display = ('well', 'operating_type', 'thp', 'annulus', 'flow_line', 'tyct', 'choke_size', 'replacement',
+                    'operated_time', 'emir_oil', 'otbivka', 'fluid', 'fluid_tonn', 'teh_rej_water', 'oil', 'oil_tonn',
+                    'daily_prod', 'gor', 'measurement', 'water_drainage', 'stop_time', 'stop_date', 'stop_reason',
+                    'research', 'result', 'spusk', 'tool_depth', 'comments', 'timestamp')
+    search_fields = ('well',)

@@ -72,3 +72,14 @@ class FieldBalanceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FieldBalance
         fields = ['field', 'transport_balance', 'transport_brutto', 'transport_netto', 'transport_density']
+
+
+class ReportExcelSerializer(serializers.ModelSerializer):
+    well = WellSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ReportExcel
+        fields = ['well', 'operating_type', 'thp', 'annulus', 'flow_line', 'tyct', 'choke_size', 'replacement',
+                  'operated_time', 'emir_oil', 'otbivka', 'fluid', 'fluid_tonn', 'teh_rej_water', 'oil', 'oil_tonn',
+                  'daily_prod', 'gor', 'measurement', 'water_drainage', 'stop_time', 'stop_date', 'stop_reason',
+                  'research', 'result', 'spusk', 'tool_depth', 'comments', 'timestamp']
