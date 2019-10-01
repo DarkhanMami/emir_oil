@@ -85,7 +85,7 @@ ADMIN_REORDER = (
         # 'main.FieldBalance',
         'main.Production',
         'main.ParkProduction',
-        'main.ReverseCalculation',
+        # 'main.ReverseCalculation',
         # 'authtoken.Token'
     )},
 
