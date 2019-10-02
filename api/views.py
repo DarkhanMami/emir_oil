@@ -396,7 +396,7 @@ class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gener
     @action(methods=['get'], detail=False)
     def get_by_month(self, request, *args, **kwargs):
         result = models.ReportExcel.objects.filter(timestamp__year__gte=2019,
-                                                  timestamp__month__gte=request.GET.get("month"),
-                                                  timestamp__year__lte=2019,
-                                                  timestamp__month__lte=request.GET.get("month"))
+                                                   timestamp__month__gte=request.GET.get("month"),
+                                                   timestamp__year__lte=2019,
+                                                   timestamp__month__lte=request.GET.get("month"))
         return Response(ReportExcelSerializer(result, many=True).data)
