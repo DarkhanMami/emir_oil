@@ -87,63 +87,140 @@ def get_mail_report(request):
         row_values = sh.row_values(rownum)
         try:
             well = Well.objects.get(name=row_values[1].replace(" ", ""))
+            replacement = None
+            otbivka = None
+            measurement = None
+            stop_date = None
+            spusk = None
             try:
                 a1_tuple = xlrd.xldate_as_tuple(row_values[8], wb.datemode)
                 replacement = datetime(*a1_tuple)
             except:
-                replacement = datetime.strptime(str(row_values[8]), "%d/%m/%Y")
+                if len(row_values[8]) > 5:
+                    replacement = datetime.strptime(str(row_values[8]), "%m/%d/%Y")
             try:
                 a1_tuple = xlrd.xldate_as_tuple(row_values[11], wb.datemode)
                 otbivka = datetime(*a1_tuple)
             except:
-                otbivka = datetime.strptime(str(row_values[11]), "%d/%m/%Y")
+                if len(row_values[11]) > 5:
+                    otbivka = datetime.strptime(str(row_values[11]), "%m/%d/%Y")
             try:
                 a1_tuple = xlrd.xldate_as_tuple(row_values[19], wb.datemode)
                 measurement = datetime(*a1_tuple)
             except:
-                measurement = datetime.strptime(str(row_values[19]), "%d/%m/%Y")
+                if len(row_values[19]) > 5:
+                    measurement = datetime.strptime(str(row_values[19]), "%m/%d/%Y")
             try:
                 a1_tuple = xlrd.xldate_as_tuple(row_values[22], wb.datemode)
                 stop_date = datetime(*a1_tuple)
             except:
-                stop_date = datetime.strptime(str(row_values[22]), "%d/%m/%Y")
+                if len(row_values[22]) > 5:
+                    stop_date = datetime.strptime(str(row_values[22]), "%m/%d/%Y")
             try:
                 a1_tuple = xlrd.xldate_as_tuple(row_values[26], wb.datemode)
                 spusk = datetime(*a1_tuple)
             except:
-                spusk = datetime.strptime(str(row_values[26]), "%d/%m/%Y")
+                if len(row_values[26]) > 5:
+                    spusk = datetime.strptime(str(row_values[26]), "%m/%d/%Y")
 
-            ReportExcel.objects.create(
-                well=well,
-                operating_type=row_values[2],
-                thp=row_values[3],
-                annulus=row_values[4],
-                flow_line=row_values[5],
-                tyct=row_values[6],
-                choke_size=row_values[7],
-                replacement=replacement,
-                operated_time=row_values[9],
-                emir_oil=row_values[10],
-                otbivka=otbivka,
-                fluid=row_values[12],
-                fluid_tonn=row_values[13],
-                teh_rej_water=row_values[14],
-                oil=row_values[15],
-                oil_tonn=row_values[16],
-                daily_prod=row_values[17],
-                gor=row_values[18],
-                measurement=measurement,
-                water_drainage=row_values[20],
-                stop_time=row_values[21],
-                stop_date=stop_date,
-                stop_reason=row_values[23],
-                research=row_values[24],
-                result=row_values[25],
-                spusk=spusk,
-                tool_depth=row_values[27],
-                comments=row_values[28],
-                timestamp=timestamp
-            )
+            if ReportExcel.objects.filter(well=well, timestamp=timestamp).exists():
+                report = ReportExcel.objects.get(well=well, timestamp=timestamp)
+            else:
+                report = ReportExcel.objects.create(well=well, timestamp=timestamp)
+            report.operating_type = row_values[2]
+            try:
+                float(row_values[3])
+                report.thp = float(row_values[3])
+            except:
+                pass
+            try:
+                float(row_values[4])
+                report.annulus = float(row_values[4])
+            except:
+                pass
+            try:
+                float(row_values[5])
+                report.flow_line = float(row_values[5])
+            except:
+                pass
+            try:
+                float(row_values[6])
+                report.tyct = float(row_values[6])
+            except:
+                pass
+            try:
+                float(row_values[7])
+                report.choke_size = float(row_values[7])
+            except:
+                pass
+            report.replacement = replacement
+            try:
+                float(row_values[9])
+                report.operated_time = float(row_values[9])
+            except:
+                pass
+            try:
+                float(row_values[10])
+                report.emir_oil = float(row_values[10])
+            except:
+                pass
+            report.otbivka = otbivka
+            try:
+                float(row_values[12])
+                report.fluid = float(row_values[12])
+            except:
+                pass
+            try:
+                float(row_values[13])
+                report.fluid_tonn = float(row_values[13])
+            except:
+                pass
+            try:
+                float(row_values[14])
+                report.teh_rej_water = float(row_values[14])
+            except:
+                pass
+            try:
+                float(row_values[15])
+                report.oil = float(row_values[15])
+            except:
+                pass
+            try:
+                float(row_values[16])
+                report.oil_tonn = float(row_values[16])
+            except:
+                pass
+            try:
+                float(row_values[17])
+                report.daily_prod = float(row_values[17])
+            except:
+                pass
+            try:
+                float(row_values[18])
+                report.gor = float(row_values[18])
+            except:
+                pass
+            report.measurement = measurement
+            try:
+                float(row_values[20])
+                report.water_drainage = float(row_values[20])
+            except:
+                pass
+            report.stop_time = row_values[21]
+            report.stop_date = stop_date
+            report.stop_reason = row_values[23]
+            report.research = row_values[24]
+            report.result = row_values[25]
+            report.spusk = spusk
+            try:
+                float(row_values[27])
+                report.tool_depth = float(row_values[27])
+            except:
+                pass
+            report.comments = row_values[28]
+            report.save()
+
+        # except Exception as e: print(e)
         except:
             pass
 
