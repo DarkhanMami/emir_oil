@@ -113,39 +113,38 @@ def get_mail_report(request):
             except:
                 spusk = datetime.strptime(str(row_values[26]), "%d/%m/%Y")
 
+            ReportExcel.objects.create(
+                well=well,
+                operating_type=row_values[2],
+                thp=row_values[3],
+                annulus=row_values[4],
+                flow_line=row_values[5],
+                tyct=row_values[6],
+                choke_size=row_values[7],
+                replacement=replacement,
+                operated_time=row_values[9],
+                emir_oil=row_values[10],
+                otbivka=otbivka,
+                fluid=row_values[12],
+                fluid_tonn=row_values[13],
+                teh_rej_water=row_values[14],
+                oil=row_values[15],
+                oil_tonn=row_values[16],
+                daily_prod=row_values[17],
+                gor=row_values[18],
+                measurement=measurement,
+                water_drainage=row_values[20],
+                stop_time=row_values[21],
+                stop_date=stop_date,
+                stop_reason=row_values[23],
+                research=row_values[24],
+                result=row_values[25],
+                spusk=spusk,
+                tool_depth=row_values[27],
+                comments=row_values[28],
+                timestamp=timestamp
+            )
         except:
             pass
-
-        ReportExcel.objects.create(
-            well=well,
-            operating_type=row_values[2],
-            thp=row_values[3],
-            annulus=row_values[4],
-            flow_line=row_values[5],
-            tyct=row_values[6],
-            choke_size=row_values[7],
-            replacement=replacement,
-            operated_time=row_values[9],
-            emir_oil=row_values[10],
-            otbivka=otbivka,
-            fluid=row_values[12],
-            fluid_tonn=row_values[13],
-            teh_rej_water=row_values[14],
-            oil=row_values[15],
-            oil_tonn=row_values[16],
-            daily_prod=row_values[17],
-            gor=row_values[18],
-            measurement=measurement,
-            water_drainage=row_values[20],
-            stop_time=row_values[21],
-            stop_date=stop_date,
-            stop_reason=row_values[23],
-            research=row_values[24],
-            result=row_values[25],
-            spusk=spusk,
-            tool_depth=row_values[27],
-            comments=row_values[28],
-            timestamp=timestamp
-        )
 
     return HttpResponse("OK")
