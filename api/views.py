@@ -21,7 +21,7 @@ from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
     FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer, ReportExcelSerializer
-from datetime import date
+from datetime import date, datetime
 from django.core.mail import EmailMessage
 
 
@@ -381,7 +381,7 @@ class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gener
         return {'request': self.request}
 
     def get_queryset(self):
-        return models.ReportExcel.objects.all()
+        return None
 
     def get_serializer_class(self):
         return ReportExcelSerializer
@@ -394,9 +394,7 @@ class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gener
         return [permission() for permission in permission_classes]
 
     @action(methods=['get'], detail=False)
-    def get_by_month(self, request, *args, **kwargs):
-        result = models.ReportExcel.objects.filter(timestamp__year__gte=2019,
-                                                   timestamp__month__gte=request.GET.get("month"),
-                                                   timestamp__year__lte=2019,
-                                                   timestamp__month__lte=request.GET.get("month"))
+    def get_by_day(self, request, *args, **kwargs):
+        dt = datetime.strptime(request.GET.get("date"), '%Y-%m-%d')
+        result = models.ReportExcel.objects.filter(timestamp__exact=dt)
         return Response(ReportExcelSerializer(result, many=True).data)
