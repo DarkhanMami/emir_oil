@@ -374,7 +374,7 @@ class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericView
 class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('field',)
+    filter_fields = ('well',)
     queryset = models.ReportExcel.objects.all()
 
     def get_serializer_context(self):
