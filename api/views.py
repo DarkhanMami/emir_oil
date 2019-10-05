@@ -172,30 +172,32 @@ class ProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Generi
 
     @action(methods=['post'], detail=False)
     def add_today_data(self, request, *args, **kwargs):
-        today = date.today()
-        if models.Production.objects.filter(timestamp=today).exists():
-            return Response("Data exists")
-        else:
-            last_day = models.Production.objects.order_by('-timestamp').first().timestamp
-            data = models.Production.objects.filter(timestamp=last_day)
-            for item in data:
-                if models.WellMatrix.objects.filter(well=item.well).exists():
-                    matrix = models.WellMatrix.objects.get(well=item.well)
-                    matrix.fluid = item.fluid
-                    matrix.teh_rej_fluid = item.teh_rej_fluid
-                    matrix.teh_rej_oil = item.teh_rej_oil
-                    matrix.teh_rej_water = item.teh_rej_water
-                    matrix.gas = item.gas
-                    matrix.save()
-                item.pk = None
-                item.timestamp = today
-                item.save()
-            data = models.ParkProduction.objects.filter(timestamp=last_day)
-            for item in data:
-                item.pk = None
-                item.timestamp = today
-                item.save()
-            return Response("Success")
+        last_day = models.Production.objects.order_by('-timestamp').first().timestamp
+        cur_day = last_day + timedelta(days=1)
+        while cur_day <= date.today():
+            if models.Production.objects.filter(timestamp=cur_day).exists():
+                pass
+            else:
+                data = models.Production.objects.filter(timestamp=last_day)
+                for item in data:
+                    if models.WellMatrix.objects.filter(well=item.well).exists():
+                        matrix = models.WellMatrix.objects.get(well=item.well)
+                        matrix.fluid = item.fluid
+                        matrix.teh_rej_fluid = item.teh_rej_fluid
+                        matrix.teh_rej_oil = item.teh_rej_oil
+                        matrix.teh_rej_water = item.teh_rej_water
+                        matrix.gas = item.gas
+                        matrix.save()
+                    item.pk = None
+                    item.timestamp = cur_day
+                    item.save()
+                data = models.ParkProduction.objects.filter(timestamp=last_day)
+                for item in data:
+                    item.pk = None
+                    item.timestamp = cur_day
+                    item.save()
+            cur_day = cur_day + timedelta(days=1)
+        return Response("Success")
 
 
 class ParkProductionViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
