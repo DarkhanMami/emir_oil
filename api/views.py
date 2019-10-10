@@ -9,7 +9,7 @@ from django.utils import timezone
 from django_filters import rest_framework as filters
 from rest_framework import generics, mixins, status
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -400,3 +400,36 @@ class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gener
         dt = datetime.strptime(request.GET.get("date"), '%Y-%m-%d')
         result = models.ReportExcel.objects.filter(timestamp__exact=dt)
         return Response(ReportExcelSerializer(result, many=True).data)
+
+
+@api_view(['GET'])
+def add_today_data(request):
+    last_day = models.Production.objects.order_by('-timestamp').first().timestamp
+    cur_day = last_day + timedelta(days=1)
+    while cur_day <= date.today():
+        if models.Production.objects.filter(timestamp=cur_day).exists():
+            pass
+        else:
+            data = models.Production.objects.filter(timestamp=last_day)
+            for item in data:
+                if models.WellMatrix.objects.filter(well=item.well).exists():
+                    matrix = models.WellMatrix.objects.get(well=item.well)
+                    matrix.fluid = item.fluid
+                    matrix.teh_rej_fluid = item.teh_rej_fluid
+                    matrix.teh_rej_oil = item.teh_rej_oil
+                    matrix.teh_rej_water = item.teh_rej_water
+                    matrix.gas = item.gas
+                    matrix.save()
+                item.pk = None
+                item.timestamp = cur_day
+                item.save()
+            data = models.ParkProduction.objects.filter(timestamp=last_day)
+            for item in data:
+                item.pk = None
+                item.timestamp = cur_day
+                item.save()
+        cur_day = cur_day + timedelta(days=1)
+    return Response({
+        "info": "New data is added"
+    })
+
