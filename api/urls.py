@@ -18,7 +18,7 @@ router.register(r'report_excel', views.ReportExcelViewSet, base_name='report_exc
 urlpatterns = [
     path('authenticate/', views.AuthView.as_view()),
     path('', include(router.urls)),
-
+    path('add_today_data/', views.add_today_data),
     path('<int:pk>/', views.DetailUser.as_view()),
     path('rest-auth/', include('rest_auth.urls')),
 ]
