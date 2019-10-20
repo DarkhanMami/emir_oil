@@ -196,10 +196,10 @@ class ParkOil(models.Model):
     gos_num = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Гос.номер'))
     driver = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Ф.И.О. водителя'))
     fluid_brutto = models.FloatField(default=0, verbose_name=_('Добыча по весам (брутто)'))
-    go_to = models.TimeField(blank=False, verbose_name=_('Время заезда на ГУ'))
-    go_out = models.TimeField(blank=False, verbose_name=_('Время выезда из ГУ'))
-    start = models.TimeField(blank=False, verbose_name=_('Начало налива'))
-    end = models.TimeField(blank=False, verbose_name=_('Конец налива'))
+    go_to = models.TimeField(blank=True, null=True, verbose_name=_('Время заезда на ГУ'))
+    go_out = models.TimeField(blank=True, null=True, verbose_name=_('Время выезда из ГУ'))
+    start = models.TimeField(blank=True, null=True, verbose_name=_('Начало налива'))
+    end = models.TimeField(blank=True, null=True, verbose_name=_('Конец налива'))
     timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
 
     class Meta:
