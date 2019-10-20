@@ -396,6 +396,14 @@ class ParkOilViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericVi
         permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    @action(methods=['get'], detail=False)
+    def get_by_month(self, request, *args, **kwargs):
+        result = models.ParkOil.objects.filter(timestamp__year__gte=2019,
+                                               timestamp__month__gte=request.GET.get("month"),
+                                               timestamp__year__lte=2019,
+                                               timestamp__month__lte=request.GET.get("month"))
+        return Response(ParkOilSerializer(result, many=True).data)
+
 
 class ReportExcelViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
 
