@@ -13,6 +13,7 @@ router.register(r'fields', views.FieldViewSet, base_name='fields')
 router.register(r'wells', views.WellViewSet, base_name='wells')
 router.register(r'production', views.ProductionViewSet, base_name='production')
 router.register(r'park_production', views.ParkProductionViewSet, base_name='park_production')
+router.register(r'park_oil', views.ParkOilViewSet, base_name='park_oil')
 router.register(r'report_excel', views.ReportExcelViewSet, base_name='report_excel')
 
 urlpatterns = [

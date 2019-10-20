@@ -20,7 +20,8 @@ from api.serializers import UserSerializer
 from main import models
 from main.models import WellMatrix
 from main.serializers import WellMatrixCreateSerializer, WellMatrixSerializer, WellSerializer, FieldSerializer, \
-    FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer, ReportExcelSerializer
+    FieldBalanceSerializer, FieldBalanceCreateSerializer, ProductionSerializer, ParkProductionSerializer, \
+    ReportExcelSerializer, ParkOilSerializer
 from datetime import date, datetime
 from django.core.mail import EmailMessage
 
@@ -364,6 +365,29 @@ class FieldViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericView
 
     def get_serializer_class(self):
         return FieldSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class ParkOilViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('field',)
+    queryset = models.ParkOil.objects.all()
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    def get_queryset(self):
+        return models.ParkOil.objects.all()
+
+    def get_serializer_class(self):
+        return ParkOilSerializer
 
     def get_permissions(self):
         """
