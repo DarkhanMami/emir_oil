@@ -83,3 +83,12 @@ class ReportExcelSerializer(serializers.ModelSerializer):
                   'operated_time', 'emir_oil', 'otbivka', 'fluid', 'fluid_tonn', 'teh_rej_water', 'oil', 'oil_tonn',
                   'daily_prod', 'gor', 'measurement', 'water_drainage', 'stop_time', 'stop_date', 'stop_reason',
                   'research', 'result', 'spusk', 'tool_depth', 'comments', 'timestamp']
+
+
+class ParkOilSerializer(serializers.ModelSerializer):
+    field = FieldSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = ParkOil
+        fields = ['field', 'ttn', 'contractor', 'gos_num', 'driver', 'fluid_brutto',
+                  'go_to', 'start', 'end', 'go_out', 'timestamp']

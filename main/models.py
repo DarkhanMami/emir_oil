@@ -189,6 +189,24 @@ class ParkProduction(models.Model):
         verbose_name_plural = _("Парковые добычи")
 
 
+class ParkOil(models.Model):
+    field = models.ForeignKey(Field, blank=False, null=False, on_delete=models.CASCADE, related_name='oil_fields')
+    ttn = models.IntegerField(default=0, verbose_name=_('Номер ТТН'))
+    contractor = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Подрядчик'))
+    gos_num = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Гос.номер'))
+    driver = models.CharField(max_length=20, blank=True, null=True, verbose_name=_('Ф.И.О. водителя'))
+    fluid_brutto = models.FloatField(default=0, verbose_name=_('Добыча по весам (брутто)'))
+    go_to = models.TimeField(blank=False, verbose_name=_('Время заезда на ГУ'))
+    go_out = models.TimeField(blank=False, verbose_name=_('Время выезда из ГУ'))
+    start = models.TimeField(blank=False, verbose_name=_('Начало налива'))
+    end = models.TimeField(blank=False, verbose_name=_('Конец налива'))
+    timestamp = models.DateField(blank=False, verbose_name=_('Дата'))
+
+    class Meta:
+        verbose_name = _("Журнал сдачи нефти")
+        verbose_name_plural = _("Журнал сдачи нефти")
+
+
 class ReportExcel(models.Model):
     well = models.ForeignKey(Well, blank=False, null=False, on_delete=models.CASCADE, related_name='excel_wells')
     operating_type = models.CharField(blank=True, null=True, max_length=50, verbose_name=_("Способ эксплуатации"))
